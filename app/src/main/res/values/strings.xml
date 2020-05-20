@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">DICTIONARY</string>
+    <string name="english_to_myanmar_dictionary">English To Myanmar Dictionary</string>
+    <string name="english_to_myanmar">English To Myanmar</string>
+    <string name="add_new_definition">Add New Definition</string>
+    <string name="view_all_definition">View All Definition</string>
+</resources>
