@@ -1,13 +1,18 @@
 package com.example.dictionary;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +49,7 @@ public class MyListAdapter extends ArrayAdapter<Word> {
         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
             dbManager = new DBManager(context);
             dbManager.open();
+
             //we need to get the view of the xml for our list item
             //And for this we need a layoutinflater
             LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -59,7 +65,7 @@ public class MyListAdapter extends ArrayAdapter<Word> {
             ImageButton btn_delete = view.findViewById(R.id.btn_delete);
 
             //getting the hero of the specified position
-            Word word = wordList.get(position);
+            Word  word= wordList.get(position);
 
             //adding values to the list item
             txt_no.setText((position+1)+"");
@@ -72,6 +78,38 @@ public class MyListAdapter extends ArrayAdapter<Word> {
                 public void onClick(View v) {
                     Toast toast=Toast.makeText(getContext(),"Click Update",Toast.LENGTH_SHORT);
                     toast.show();
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    ViewGroup viewGroup = v.findViewById(android.R.id.content);
+                    View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.customview, viewGroup, false);
+                    final EditText edt_eng = dialogView.findViewById(R.id.edt_eng_word);
+                    final EditText edt_myanmar = dialogView.findViewById(R.id.edt_myan_word);
+                    Button btn_update_word=dialogView.findViewById(R.id.buttonUpdate);
+                    Word word = wordList.get(position);
+                    final String id=dbManager.getContactByName(word.getEng_word());
+                    final long _id=Long.parseLong(id);
+                    edt_eng.setText(word.getEng_word()+"-"+id);
+                    edt_myanmar.setText(word.getMyanmar_word());
+
+                    builder.setView(dialogView);
+                    final AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+
+                    btn_update_word.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            String eng_word=edt_eng.getText().toString();
+                            String myan_word=edt_myanmar.getText().toString();
+                            int return_result=dbManager.update(_id,eng_word,myan_word);
+                            if(return_result>0){
+                                Toast toast=Toast.makeText(getContext(),"Update Successful!",Toast.LENGTH_SHORT);
+                                toast.show();
+                                alertDialog.dismiss();
+                            }
+
+                        }
+                    });
                 }
             });
 
@@ -125,5 +163,35 @@ public class MyListAdapter extends ArrayAdapter<Word> {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
+
+    public void showDialog(Context activity, String msg){
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_layout);
+
+//        TextView text = (TextView) dialog.findViewById(R.id.text_dialog);
+//        text.setText(msg);
+
+        Button dialogButton1 = (Button) dialog.findViewById(R.id.btn_update);
+        dialogButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        Button dialogButton2 = (Button) dialog.findViewById(R.id.btn_cancel);
+        dialogButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
 
 }

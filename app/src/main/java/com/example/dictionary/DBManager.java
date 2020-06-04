@@ -59,6 +59,26 @@ public class DBManager {
         return cursor;
     }
 
+    public String getContactByName(String name)
+    {
+        String contact;
+        //Query
+        String query = "select * from WORDS where EnglishWord = ?";
+        Cursor cursor = database.rawQuery(query, new String[] {name});
+        if(cursor.getCount()<1) // Name Not Exist
+        {
+            cursor.close();
+            contact = "Not Found";
+            return contact;
+        }
+        cursor.moveToFirst();
+
+        contact = cursor.getString(cursor.getColumnIndex("_id"));
+
+        cursor.close();
+        return contact;
+    }
+
     public int update(long _id, String english_word, String myanmar_word) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.english_word, english_word);
