@@ -25,7 +25,7 @@ private Button btn_view_all_def;
             public void onClick(View v) {
                 Toast toast=Toast.makeText(getApplicationContext(),"Hello English to Myanmar",Toast.LENGTH_SHORT);
                 toast.show();
-                Intent intent = new Intent(getApplicationContext(), DispalyActvity.class);
+                Intent intent = new Intent(getApplicationContext(), SearchActivity.class);
                 startActivity(intent);
             }
         });

@@ -117,6 +117,34 @@ public class DBManager {
         //database.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper._ID + "=" + _id, null);
         database.execSQL("DELETE FROM " +DatabaseHelper.TABLE_NAME+ "  WHERE EnglishWord ='"+word+"'");
     }
+
+    public ArrayList<Word> fetchAll(String def)
+    {
+        String contact;
+        Log.e("def",def);
+        ArrayList<Word> listItems = new ArrayList<Word>();
+        //Query
+        String query = "select * from WORDS where EnglishWord "+" like '%"+def+"%'";
+        Cursor cursor = database.rawQuery(query, new String[] {});
+        final int engIndex = cursor.getColumnIndex(DatabaseHelper.english_word);
+        final int myanmarIndex = cursor.getColumnIndex(DatabaseHelper.myanmar_word );
+
+        if (cursor.moveToFirst()) {
+            do {
+                Word word = new Word();
+
+                word.setEng_word(cursor.getString(engIndex));
+
+                word.setMyanmar_word(cursor.getString(myanmarIndex));
+
+                listItems.add(word);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return listItems;
+    }
 //public int delete(String ID)
 //{
 //    String where="ID=?";
