@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,8 +77,8 @@ public class MyListAdapter extends ArrayAdapter<Word> {
 
                 @Override
                 public void onClick(View v) {
-                    Toast toast=Toast.makeText(getContext(),"Click Update",Toast.LENGTH_SHORT);
-                    toast.show();
+//                    Toast toast=Toast.makeText(getContext(),"Click Update",Toast.LENGTH_SHORT);
+//                    toast.show();
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     ViewGroup viewGroup = v.findViewById(android.R.id.content);
                     View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.customview, viewGroup, false);
@@ -87,7 +88,7 @@ public class MyListAdapter extends ArrayAdapter<Word> {
                     Word word = wordList.get(position);
                     final String id=dbManager.getContactByName(word.getEng_word());
                     final long _id=Long.parseLong(id);
-                    edt_eng.setText(word.getEng_word()+"-"+id);
+                    edt_eng.setText(word.getEng_word());
                     edt_myanmar.setText(word.getMyanmar_word());
 
                     builder.setView(dialogView);
@@ -106,6 +107,10 @@ public class MyListAdapter extends ArrayAdapter<Word> {
                                 Toast toast=Toast.makeText(getContext(),"Update Successful!",Toast.LENGTH_SHORT);
                                 toast.show();
                                 alertDialog.dismiss();
+                                Intent intent= new Intent(context, DispalyActvity.class);
+                               // intent.putExtra("your_extra","your_class_value");
+                                context.startActivity(intent);
+
                             }
 
                         }

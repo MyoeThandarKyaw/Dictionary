@@ -3,12 +3,15 @@ package com.example.dictionary;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -43,7 +46,7 @@ private EditText edt_search;
                 if (s.length() > 0)
                 {
 
-                    Log.e("characteronTextChanged",s.toString());
+                    //Log.e("characteronTextChanged",s.toString());
 
 
                 }
@@ -60,10 +63,22 @@ private EditText edt_search;
                 if(s.length()>0){
                     wordArrayList= dbManager.fetchAll(s.toString());
                     if(wordArrayList!=null){
-                        MyListAdapter adapter = new MyListAdapter(getApplicationContext(), R.layout.display_result, wordArrayList);
-                        adapter.notifyDataSetChanged();
+                        WordAdapter itemsAdapter =
+                                new WordAdapter(getApplicationContext(), wordArrayList);
 
-                        listView.setAdapter(adapter);
+                        listView.setAdapter(itemsAdapter);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                                    long id) {
+                                Word word= (Word) parent.getAdapter().getItem(position);
+                                Intent intent = new Intent(SearchActivity.this, DisplayDefinitation.class);
+                                intent.putExtra("english_word", word.getEng_word());
+                                intent.putExtra("myanmar_word", word.getMyanmar_word());
+
+                                startActivity(intent);
+                            }
+                        });
 
                     }
                 }
@@ -78,8 +93,11 @@ private EditText edt_search;
             @Override
             public void onClick(View v) {
                 edt_search.setText("");
+                wordArrayList.clear();
             }
         });
+
+
 
 
 
