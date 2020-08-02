@@ -47,7 +47,7 @@ public class MyListAdapter extends ArrayAdapter<Word> {
         //this will return the ListView Item as a View
         @NonNull
         @Override
-        public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        public View getView(final int position, @Nullable final View convertView, @NonNull ViewGroup parent) {
             dbManager = new DBManager(context);
             dbManager.open();
 
@@ -56,7 +56,7 @@ public class MyListAdapter extends ArrayAdapter<Word> {
             LayoutInflater layoutInflater = LayoutInflater.from(context);
 
             //getting the view
-            View view = layoutInflater.inflate(resource, null, false);
+            final View view = layoutInflater.inflate(resource, null, false);
 
             //getting the view elements of the list from the view
             TextView txt_no=view.findViewById(R.id.txt_no);
@@ -107,10 +107,11 @@ public class MyListAdapter extends ArrayAdapter<Word> {
                                 Toast toast=Toast.makeText(getContext(),"Update Successful!",Toast.LENGTH_SHORT);
                                 toast.show();
                                 alertDialog.dismiss();
+
                                 Intent intent= new Intent(context, DispalyActvity.class);
                                // intent.putExtra("your_extra","your_class_value");
                                 context.startActivity(intent);
-
+                                ((Activity)context).finish();
                             }
 
                         }
@@ -136,7 +137,7 @@ public class MyListAdapter extends ArrayAdapter<Word> {
         private void removeWord(final int position) {
             //Creating an alert dialog to confirm the deletion
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Are you sure you want to delete this?");
+            builder.setTitle("Are you sure  to delete this?");
 
             //if the response is positive in the alert
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
