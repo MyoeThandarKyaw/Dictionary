@@ -63,7 +63,7 @@
             android:layout_weight="1"
             android:background="@drawable/btn_shape_round"
             android:textAllCaps="false"
-            android:text="Add New Definition"/>
+            android:text="Save New Definition"/>
     </LinearLayout>
 
 
